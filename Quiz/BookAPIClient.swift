@@ -7,13 +7,18 @@
 
 import SwiftUI
 
-class BooksAPIClient: ObservableObject {
-    @Published var books: BookResponse?
+class TranslationAPIClient: ObservableObject {
+    @Published var translation: TranslationResponse?
     private let apiClient = APIClient()
     
-    func fetchBooks(queryString: String) {
+    func translate(text: String) {
+        let isJapanese = text.range(of: "[\\p{Hiragana}\\p{Katakana}\\p{Han}]", options: .regularExpression) != nil
+        let sourceLang = isJapanese ? "ja" : "en"
+        let targetLang = isJapanese ? "en" : "ja"
+        let urlString = "https://api.mymemory.translated.net/get?q=\(text)&langpair=\(sourceLang)|\(targetLang)"
+        
         Task { @MainActor in
-            self.books = await apiClient.fetchData(from: "https://www.googleapis.com/books/v1/volumes?q=\(queryString)", responseType: BookResponse.self)
+            self.translation = await apiClient.fetchData(from: urlString, responseType: TranslationResponse.self)
         }
     }
 }

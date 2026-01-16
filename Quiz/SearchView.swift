@@ -8,24 +8,65 @@
 import SwiftUI
 
 struct SearchView: View {
-    @State private var searchText = ""
-    @StateObject private var apiClient = BooksAPIClient()
+    @State private var inputText = ""
+    @State private var lastTranslatedText = ""
+    @StateObject private var apiClient = TranslationAPIClient()
     
     var body: some View {
         NavigationStack{
-            List{
-                ForEach(apiClient.books?.items ?? [], id: \.id){ item in
-                    SearchRowView(imageUrl: item.volumeInfo.imangeLinks?.thumbnail,
-                                  title: item.volumeInfo.title,
-                                  publisher: item.volumeInfo.publisher)
+            VStack(spacing: 0) {
+                // 入力エリア
+                VStack(spacing: 12) {
+                    TextField("日本語または英語を入力", text: $inputText, axis: .vertical)
+                        .textFieldStyle(.roundedBorder)
+                        .lineLimit(3...6)
+                        .padding(.horizontal)
+                    
+                    Button(action: {
+                        lastTranslatedText = inputText
+                        apiClient.translate(text: inputText)
+                    }) {
+                        HStack {
+                            Image(systemName: "globe")
+                            Text("翻訳する")
+                        }
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(inputText.isEmpty ? Color.gray : Color.blue)
+                        .foregroundColor(.white)
+                        .cornerRadius(10)
+                    }
+                    .disabled(inputText.isEmpty)
+                    .padding(.horizontal)
+                }
+                .padding(.vertical)
+                .background(Color(.systemGroupedBackground))
+                
+                // 翻訳結果エリア
+                if let translation = apiClient.translation, !lastTranslatedText.isEmpty {
+                    let isJapanese = lastTranslatedText.range(of: "[\\p{Hiragana}\\p{Katakana}\\p{Han}]", options: .regularExpression) != nil
+                    let sourceLang = isJapanese ? "ja" : "en"
+                    let targetLang = isJapanese ? "en" : "ja"
+                    
+                    List {
+                        SearchRowView(
+                            originalText: lastTranslatedText,
+                            translatedText: translation.responseData.translatedText,
+                            sourceLang: sourceLang,
+                            targetLang: targetLang
+                        )
+                        .id("\(lastTranslatedText)-\(translation.responseData.translatedText)")
+                    }
+                    .listStyle(.plain)
+                } else {
+                    ContentUnavailableView(
+                        "翻訳",
+                        systemImage: "character.textbox",
+                        description: Text("テキストを入力して翻訳ボタンを押してください")
+                    )
                 }
             }
-            .navigationTitle("さがす")
-            .listStyle(.grouped)
-        }
-        .searchable(text: $searchText, placement: .navigationBarDrawer(displayMode: .always), prompt: "検索ワード")
-        .onChange(of: searchText){
-            apiClient.fetchBooks(queryString: searchText)
+            .navigationTitle("翻訳")
         }
     }
 }
