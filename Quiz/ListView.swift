@@ -6,21 +6,23 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct ListView: View {
-    @State private var savedTranslations: [Translation] = []
+    @Environment(\.modelContext) private var modelContext
+    @Query(sort: \Translation.createdAt, order: .reverse) private var translations: [Translation]
     
     var body: some View {
         NavigationStack {
             List {
-                if savedTranslations.isEmpty {
+                if translations.isEmpty {
                     ContentUnavailableView(
                         "保存された翻訳がありません",
                         systemImage: "bookmark.slash",
                         description: Text("翻訳を保存すると、ここに表示されます")
                     )
                 } else {
-                    ForEach(savedTranslations.reversed()) { translation in
+                    ForEach(translations) { translation in
                         VStack(alignment: .leading, spacing: 12) {
                             HStack {
                                 Text(translation.sourceLang.uppercased())
@@ -75,26 +77,21 @@ struct ListView: View {
             }
             .navigationTitle("保存済み")
             .toolbar {
-                if !savedTranslations.isEmpty {
+                if !translations.isEmpty {
                     EditButton()
                 }
-            }
-            .onAppear {
-                savedTranslations = SwiftDataManager().fetchAll()
             }
         }
     }
     
     private func deleteTranslations(at offsets: IndexSet) {
-        let reversedTranslations = savedTranslations.reversed()
         for index in offsets {
-            let translation = Array(reversedTranslations)[index]
-            SwiftDataManager().deleteItem(data: translation)
+            modelContext.delete(translations[index])
         }
-        savedTranslations = SwiftDataManager().fetchAll()
     }
 }
 
 #Preview {
     ListView()
+        .modelContainer(for: Translation.self, inMemory: true)
 }
