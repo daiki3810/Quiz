@@ -6,8 +6,10 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct SearchRowView: View {
+    @Environment(\.modelContext) private var modelContext
     @State var isSaved: Bool = false
     let originalText: String
     let translatedText: String
@@ -69,7 +71,7 @@ struct SearchRowView: View {
                     sourceLang: sourceLang,
                     targetLang: targetLang
                 )
-                SwiftDataManager().saveItem(data: translation)
+                modelContext.insert(translation)
                 isSaved = true
             }, label: {
                 HStack {
@@ -96,4 +98,5 @@ struct SearchRowView: View {
         sourceLang: "en",
         targetLang: "ja"
     )
+    .modelContainer(for: Translation.self, inMemory: true)
 }

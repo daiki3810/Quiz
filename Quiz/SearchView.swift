@@ -73,5 +73,6 @@ struct SearchView: View {
 
 #Preview {
     SearchView()
+        .modelContainer(for: Translation.self, inMemory: true)
 }
 
