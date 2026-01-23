@@ -98,4 +98,5 @@ struct SearchRowView: View {
         sourceLang: "en",
         targetLang: "ja"
     )
+    .modelContainer(for: Translation.self, inMemory: true)
 }
