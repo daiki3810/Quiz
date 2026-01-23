@@ -12,6 +12,7 @@ struct QuizView: View {
         QuizItem(question: "第二次界大戦の時にドイツの総統となった人物の名前は？", options: ["ビスマルク", "ムッソリーニ", "ヒトラー"], correctAnswerIndex: 0),
         QuizItem(question: "第二次界大戦の時にイタリアの独裁者となった人物の名前は？", options: ["ビスマルク", "ムッソリーニ", "ヒトラー"], correctAnswerIndex: 1),
         QuizItem(question: "ビスマルクの名言は？", options: ["「現在の問題は演説や多数決によってではなく、鉄と血によってのみ解決される」", "「やってみせ、言って聞かせて、させてみせ、ほめてやらねば、人は動かじ」", "「是非に及ばず」"], correctAnswerIndex: 0),
+        
     ]
     
     @State private var currentQuestionIndex = 0

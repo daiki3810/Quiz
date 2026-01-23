@@ -1,4 +1,5 @@
 import SwiftUI
+import SwiftData
 
 @main
 struct QuizApp: App {
@@ -6,5 +7,6 @@ struct QuizApp: App {
         WindowGroup {
             ContentView()
         }
+        .modelContainer(for: Translation.self)
     }
 }

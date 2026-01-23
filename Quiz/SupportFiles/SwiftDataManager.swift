@@ -39,5 +39,16 @@ class SwiftDataManager<T: PersistentModel> {
                 return []
             }
         }
+    
+    func deleteItem(data: T) {
+        if let context {
+            context.delete(data)
+            do {
+                try context.save()
+            } catch {
+                print(error)
+            }
+        }
+    }
 }
 
