@@ -12,7 +12,7 @@ struct ResultView: View {
                 .ignoresSafeArea()
             
             VStack {
-                Text("Apple Quiz")
+                Text("単語クイズ")
                     .font(.title)
                     .fontWeight(.bold)
                     .foregroundStyle(Color(.white))

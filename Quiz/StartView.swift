@@ -18,15 +18,18 @@ struct StartView: View {
                     Text("単語クイズ")
                         .font(.system(size: 48, weight: .bold))
                         .foregroundStyle(Color(.white))
-                    
-                    Text("保存された単語: \(translations.count)個")
-                        .font(.title3)
-                        .foregroundStyle(Color(.white).opacity(0.8))
-                        .padding(.top, 10)
+                        .padding(60)
                     
                     Spacer()
                     
                     if translations.count >= 3 {
+                        Text("保存された単語: \(translations.count)個")
+                            .font(.title3)
+                            .foregroundStyle(Color(.white))
+                            .padding(.top, 10)
+                        
+                        Spacer()
+                        
                         Button {
                             navigationPath.append("quiz")
                         } label: {
@@ -40,15 +43,13 @@ struct StartView: View {
                         }
                     } else {
                         VStack(spacing:15) {
-                            Text("クイズを開始するには")
-                                .font(.body)
-                                .foregroundColor(.white.opacity(0.7))
-                            Text("最低3つの単語を保存してくだい")
-                                .font(.headline)
+                            Text("保存された単語: \(translations.count)個\nクイズを開始するには\n最低3つの単語を保存してくだい")
+                                .font(.title3)
                                 .foregroundColor(.white)
                                 .padding()
-                                .background(.white.opacity(0.2))
+                                .background(.mint.opacity(0.8))
                                 .cornerRadius(10)
+                                .multilineTextAlignment(.center)
                         }
                     }
                 

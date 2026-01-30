@@ -30,7 +30,7 @@ struct ContentView: View {
                 TabView {
                     SearchView()
                         .tabItem {
-                            Label("検索", systemImage: "magnifyingglass")
+                            Label("翻訳", systemImage: "magnifyingglass")
                         }
                     ListView()
                         .tabItem {
@@ -38,7 +38,7 @@ struct ContentView: View {
                         }
                     StartView()
                         .tabItem {
-                            Label("クイズ", systemImage: "questionmark")
+                            Label("単語クイズ", systemImage: "questionmark")
                         }
                         
                 }
