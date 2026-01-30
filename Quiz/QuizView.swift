@@ -305,7 +305,7 @@ struct QuizView: View {
             generateQuizItems()
             totalQuestions = quizItems.count
         }
-        onChange(
+        .onChange(
             of: translations
         ) {
             if currentQuestionIndex == 0 && !isShowingFeedback {
