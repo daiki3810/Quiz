@@ -1,13 +1,16 @@
 import SwiftUI
 
 struct ResultView: View {
-//    @Binding var currentScreen: Screen
     @Binding var score: Int
+    @Binding var navigationPath: NavigationPath
     
     let totalQuestions: Int
     
     var body: some View {
         ZStack {
+            Color(.background)
+                .ignoresSafeArea()
+            
             VStack {
                 Text("Apple Quiz")
                     .font(.title)
@@ -30,7 +33,7 @@ struct ResultView: View {
                 
                 Button {
                     score = 0 // スコアをリセット
-                    //currentQuestionIndexはQuizVeiewの@Stateなので、QuizVeiewが再生成される時にリセットされる
+                    navigationPath.removeLast(navigationPath.count) // スタート画面に戻る
                    // currentScreen = .start
                 } label: {
                     Text("タイトルへ戻る")
@@ -48,14 +51,14 @@ struct ResultView: View {
 }
 
 #Preview {
-    @Previewable @State var currentScreen: Screen = .result
     @Previewable @State var score: Int = 4
+    @Previewable @State var navigationPath = NavigationPath()
     ZStack {
         Color(.background)
             .ignoresSafeArea()
         ResultView(
-           // currentScreen: $currentScreen,
             score: $score,
+            navigationPath: $navigationPath,
             totalQuestions: 5
         )
     }
